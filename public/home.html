@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personal Finance Hub</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="navbar">
+  <div class="nav-left">
+    <div class="logo">Finora</div>
+  </div>
+
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="index.html" class="active">Home</a>
+      <a href="subscriptions.html">Subscriptions</a>
+      <a href="expenses.html">Expenses</a>
+      <a href="investments.html">Investments</a>
+    </div>
+
+    <div class="user-avatar" title="Account">👤</div>
+  </div>
+</nav>
+
+
+
+  <main class="container">
+    <header class="hero">
+      <div>
+        <h1>Welcome back 👋</h1>
+        <p class="muted">Here’s your overview report for the selected period.</p>
+      </div>
+
+      <div class="controls">
+        <select class="select">
+          <option>Last 30 Days</option>
+          <option>Last 7 Days</option>
+          <option>This Month</option>
+        </select>
+        <a class="btn" href="./expenses.html">+ Add Transaction</a>
+      </div>
+    </header>
+
+    <section class="cards">
+      <div class="card">
+        <div class="label">Available Balance</div>
+        <div class="value" id="availableBalance">$—</div>
+        <div class="hint muted">Based on server summary</div>
+      </div>
+
+      <div class="card">
+        <div class="label">Monthly Subscriptions</div>
+        <div class="value" id="subsMonthly">$—</div>
+        <div class="hint muted">Recurring costs</div>
+      </div>
+
+      <div class="card">
+        <div class="label">Total Expenses</div>
+        <div class="value" id="totalExpenses">$—</div>
+        <div class="hint muted">Spending in list</div>
+      </div>
+
+      <div class="card">
+        <div class="label">Investment Cost Basis</div>
+        <div class="value" id="investCost">$—</div>
+        <div class="hint muted">Shares × avg cost</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panelTitle">Quick Links</div>
+      <div class="quickLinks">
+        <a class="quick" href="./subscriptions.html">Manage Subscriptions</a>
+        <a class="quick" href="./expenses.html">View Expenses</a>
+        <a class="quick" href="./investments.html">Portfolio</a>
+      </div>
+    </section>
+
+    <div class="error muted" id="errorBox" style="display:none;"></div>
+  </main>
+
+  <script src="./js/home.js"></script>
+</body>
+</html>
