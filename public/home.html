@@ -1,35 +1,36 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Personal Finance Hub</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="./css/styles.css" />
 </head>
+
 <body>
   <nav class="navbar">
-  <div class="nav-left">
-    <div class="logo">Finora</div>
-  </div>
-
-  <div class="nav-right">
-    <div class="nav-links">
-      <a href="index.html" class="active">Home</a>
-      <a href="subscriptions.html">Subscriptions</a>
-      <a href="expenses.html">Expenses</a>
-      <a href="investments.html">Investments</a>
+    <div class="nav-left">
+      <div class="logo">Finmate</div>
     </div>
 
-    <div class="user-avatar" title="Account">👤</div>
-  </div>
-</nav>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="index.html" class="active">Home</a>
+        <a href="expense.html">Expenses</a>
+        <a href="invest.html">Investments</a>
+      </div>
+
+      <div class="user-avatar" title="Account">👤</div>
+    </div>
+  </nav>
 
 
 
   <main class="container">
     <header class="hero">
       <div>
-        <h1>Welcome back 👋</h1>
+        <h1>Hi Mohammed</h1>
         <p class="muted">Here’s your overview report for the selected period.</p>
       </div>
 
@@ -43,44 +44,145 @@
       </div>
     </header>
 
-    <section class="cards">
-      <div class="card">
-        <div class="label">Available Balance</div>
-        <div class="value" id="availableBalance">$—</div>
-        <div class="hint muted">Based on server summary</div>
+   <section class="cards">
+  <div class="card">
+    <div class="label">Available Balance</div>
+    <div class="value" id="availableBalance">$—</div>
+    <div class="hint muted">Based on server summary</div>
+  </div>
+
+  <div class="card">
+    <div class="label">Monthly Subscriptions</div>
+    <div class="value" id="subsMonthly">$—</div>
+    <div class="hint muted">Recurring costs</div>
+  </div>
+
+  <div class="card">
+    <div class="label">Total Expenses</div>
+    <div class="value" id="totalExpenses">$—</div>
+    <div class="hint muted">Spending in list</div>
+  </div>
+
+  <div class="card">
+    <div class="label">Investment Cost Basis</div>
+    <div class="value" id="investCost">$—</div>
+    <div class="hint muted">Shares × avg cost</div>
+  </div>
+</section>
+<div class="sectionTitle">
+  <span>Overview</span>
+  <span class="muted small">Last 30 days</span>
+</div>
+
+<!-- ✅ Analytics row (3 equal cards) -->
+<section class="analytics">
+  <!-- 1) Category Breakdown -->
+  <div class="panelCard">
+    <h3>Category Breakdown</h3>
+    <div class="chartWrap">
+      <canvas id="categoryChart"></canvas>
+    </div>
+  </div>
+
+  <!-- 2) Spendings -->
+  <div class="panelCard">
+    <div class="panelHeader">
+      <h3>Spendings</h3>
+      <span class="muted small">This month</span>
+    </div>
+
+    <div class="spendList">
+      <div class="spendItem">
+        <div class="spendLeft">
+          <div class="spendIcon">🏠</div>
+          <div>
+            <div class="spendTitle">Rent</div>
+            <div class="muted small">Housing</div>
+          </div>
+        </div>
+        <div class="spendAmount">$1,200</div>
       </div>
 
-      <div class="card">
-        <div class="label">Monthly Subscriptions</div>
-        <div class="value" id="subsMonthly">$—</div>
-        <div class="hint muted">Recurring costs</div>
+      <div class="spendItem">
+        <div class="spendLeft">
+          <div class="spendIcon">🍔</div>
+          <div>
+            <div class="spendTitle">Food</div>
+            <div class="muted small">Dining & groceries</div>
+          </div>
+        </div>
+        <div class="spendAmount">$500</div>
       </div>
 
-      <div class="card">
-        <div class="label">Total Expenses</div>
-        <div class="value" id="totalExpenses">$—</div>
-        <div class="hint muted">Spending in list</div>
+      <div class="spendItem">
+        <div class="spendLeft">
+          <div class="spendIcon">🔁</div>
+          <div>
+            <div class="spendTitle">Subscriptions</div>
+            <div class="muted small">Recurring</div>
+          </div>
+        </div>
+        <div class="spendAmount">$150</div>
       </div>
 
-      <div class="card">
-        <div class="label">Investment Cost Basis</div>
-        <div class="value" id="investCost">$—</div>
-        <div class="hint muted">Shares × avg cost</div>
+      <div class="spendItem">
+        <div class="spendLeft">
+          <div class="spendIcon">📈</div>
+          <div>
+            <div class="spendTitle">Investments</div>
+            <div class="muted small">Contributions</div>
+          </div>
+        </div>
+        <div class="spendAmount">$400</div>
       </div>
-    </section>
+    </div>
+  </div>
 
-    <section class="panel">
-      <div class="panelTitle">Quick Links</div>
-      <div class="quickLinks">
-        <a class="quick" href="./subscriptions.html">Manage Subscriptions</a>
-        <a class="quick" href="./expenses.html">View Expenses</a>
-        <a class="quick" href="./investments.html">Portfolio</a>
+  <!-- 3) Income vs Expenses -->
+  <div class="panelCard">
+    <h3>Income vs Expenses</h3>
+    <div class="chartWrap">
+      <canvas id="trendChart"></canvas>
+    </div>
+  </div>
+</section>
+
+
+    <section class="smartTipsSection">
+  <div class="smartTipsInner">
+
+    <div class="panelHeader">
+      <h3>Smart Tips</h3>
+      <span class="muted small" id="tipsStatus"></span>
+    </div>
+
+    <!-- Loading / Progress -->
+    <div class="tipsProgress">
+      <div class="tipsProgressTop">
+        <span class="muted small">Generating tips</span>
+        <span class="tipsPercent" id="tipsPercent">0%</span>
       </div>
-    </section>
+
+      <div class="tipsBar">
+        <div class="tipsFill" id="tipsFill"></div>
+      </div>
+    </div>
+
+    <!-- Tips will appear here -->
+    <div class="tipsList" id="tipsList"></div>
+    </div>
+</section>
+
+
+
 
     <div class="error muted" id="errorBox" style="display:none;"></div>
   </main>
-
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="./js/home.js"></script>
+
+
+
 </body>
+
 </html>
