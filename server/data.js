@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 
-const DATA_PATH = path.join(__dirname, "expenses.json");
+const DATA_PATH = path.join(__dirname, "src","data", "expenses.json");
 
 function readExpenses() {
   try {

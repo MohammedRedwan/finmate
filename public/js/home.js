@@ -34,6 +34,7 @@ async function fetchExpenses() {
   }
 }
 
+
 function money(n) {
   return `$${Number(n || 0).toFixed(2)}`;
 }
@@ -76,23 +77,68 @@ function filterExpensesByRange(expenses, rangeValue) {
   return withDates.filter(e => e._dateObj >= start && e._dateObj <= today);
 }
 
-async function fetchSummary() {
-  const res = await fetch("/api/summary");
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || "Failed to load summary");
-  return data;
+function getLoggedInUserName() {
+  try {
+    const u = JSON.parse(localStorage.getItem("finmate_user"));
+    return u?.username || null;
+  } catch {
+    return null;
+  }
 }
 
-function setText(id, value) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = value;
+function renderWelcomeTitle() {
+  const el = document.getElementById("welcomeTitle");
+  if (!el) return;
+
+  const name = getLoggedInUserName();
+  el.textContent = name ? `Hello ${name}` : "Hello User";
+}
+
+async function fetchInvestments() {
+  try {
+    const res = await fetch("/api/invest");
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+
+    // Supports either:
+    // 1) [ {ticker, buyPrice, shares, ...}, ... ]
+    // 2) { portfolio: [ ... ] }
+    return Array.isArray(data) ? data : (data.portfolio || []);
+  } catch {
+    return [];
+  }
+}
+
+function calcCostBasis(investments) {
+  return investments.reduce((sum, inv) => {
+    const buy = Number(inv.buyPrice ?? inv.buy ?? inv.cost ?? 0);
+    const shares = Number(inv.shares ?? inv.qty ?? 0);
+    return sum + buy * shares;
+  }, 0);
+}
+
+function renderInvestmentCard(investments) {
+  const el = document.getElementById("investCost");
+  if (!el) return;
+  const cost = calcCostBasis(investments);
+  el.textContent = money(cost);
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
   window.scrollTo(0, 0);
+  renderWelcomeTitle();
+  window.addEventListener("finmate:userChanged", renderWelcomeTitle);
   const rangeSelect = document.getElementById("rangeSelect");
 
   const allExpenses = await fetchExpenses();
+  const investments = await fetchInvestments();
+  renderInvestmentCard(investments);
+
+window.addEventListener("finmate:userChanged", async () => {
+  renderWelcomeTitle();
+  const investments = await fetchInvestments();
+  renderInvestmentCard(investments);
+});
 
   function render(rangeVal) {
     const filtered = filterExpensesByRange(allExpenses, rangeVal);
@@ -306,31 +352,55 @@ function renderSpendings(expenses) {
   const container = document.getElementById("spendList");
   if (!container) return;
 
-  const byCategory = {};
+  const iconMap = {
+    housing: "🏠",
+    rent: "🏠",
+    food: "🍔",
+    groceries: "🛒",
+    transport: "🚗",
+    transportation: "🚗",
+    subscriptions: "🔁",
+    entertainment: "🎮",
+    shopping: "🛍️",
+    bills: "🧾",
+    health: "🩺",
+    education: "📚",
+    travel: "✈️",
+    misc: "🧩",
+    other: "🧩",
+  };
 
-  expenses.forEach(e => {
+  const getIcon = (cat) => {
+    const key = String(cat || "other").toLowerCase().trim();
+    return iconMap[key] || "💸";
+  };
+
+  const byCategory = {};
+  expenses.forEach((e) => {
     const cat = e.category || "Other";
-    byCategory[cat] =
-      (byCategory[cat] || 0) + Number(e.amount || 0);
+    byCategory[cat] = (byCategory[cat] || 0) + Number(e.amount || 0);
   });
 
   const sorted = Object.entries(byCategory)
     .sort((a, b) => b[1] - a[1])
-    .slice(0, 4); // 👈 TOP 4 ONLY
+    .slice(0, 4);
 
-  container.innerHTML = sorted.map(([cat, val]) => `
-    <div class="spendItem">
-      <div class="spendLeft">
-        <div class="spendIcon">💸</div>
-        <div>
-          <div class="spendTitle">${cat}</div>
-          <div class="muted small">Total spending</div>
+  container.innerHTML = sorted
+    .map(([cat, val]) => `
+      <div class="spendItem">
+        <div class="spendLeft">
+          <div class="spendIcon">${getIcon(cat)}</div>
+          <div>
+            <div class="spendTitle">${cat}</div>
+            <div class="muted small">Total spending</div>
+          </div>
         </div>
+        <div class="spendAmount">$${val.toFixed(2)}</div>
       </div>
-      <div class="spendAmount">$${val.toFixed(2)}</div>
-    </div>
-  `).join("");
+    `)
+    .join("");
 }
+
 
 
 function renderTips(container, tips) {

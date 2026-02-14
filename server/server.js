@@ -1,5 +1,7 @@
 const express = require("express");
 const path = require("path");
+const fs = require("fs");
+
 
 const { getExpenses, addExpense, deleteExpenseById } = require("./data");
 
@@ -53,6 +55,23 @@ app.post("/api/expenses", (req, res) => {
   return res.status(201).json(newExpense);
 });
 
+app.get("/api/invest", (req, res) => {
+  // read invest.json from server folder (adjust path if yours differs)
+  const dataPath = path.join(__dirname, "src", "data", "invest.json");
+  fs.readFile(dataPath, "utf8", (err, data) => {
+    if (err) {
+      console.error("Error reading invest.json:", err);
+      return res.status(500).json({ error: "Failed to load invest data" });
+    }
+
+    try {
+      return res.status(200).json(JSON.parse(data)); // 200 OK
+    } catch (parseError) {
+      return res.status(500).json({ error: "Invalid invest JSON format" });
+    }
+  });
+});
+
 app.delete("/api/expenses/:id", (req, res) => {
   const deleted = deleteExpenseById(req.params.id);
 
@@ -63,7 +82,7 @@ app.delete("/api/expenses/:id", (req, res) => {
   return res.status(200).json({ message: "Deleted", deleted });
 });
 
-// ✅ Summary route (must be BEFORE 404)
+// Summary route (must be BEFORE 404)
 app.get("/api/summary", (req, res) => {
   const expenses = getExpenses();
 
@@ -107,13 +126,12 @@ app.get("/api/summary", (req, res) => {
     trend,
   });
 });
-
-// ✅ ONE 404 handler (MUST be last)
+// ONE 404 handler (MUST be last)
 app.use((req, res) => {
-  res.status(404).send("404 - Not Found");
+  res.status(404).send("404 Not Found");
 });
 
-// ✅ ONE listen (MUST be last)
+// ONE listen (MUST be last)
 app.listen(PORT, () => {
   console.log(`✅ Server running at http://localhost:${PORT}`);
 });

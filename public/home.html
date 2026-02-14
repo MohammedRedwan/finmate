@@ -4,8 +4,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Personal Finance Hub</title>
+  <title>FinMate</title>
   <link rel="stylesheet" href="./css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/finmate-logo-Photoroom.png">
+
+
 </head>
 
 <body>
@@ -13,7 +18,7 @@
     <div class="nav-left">
       <div class="logo">
         <img src="./assets/finmate-logo-Photoroom.png" alt="Finmate logo" class="logo-icon" />
-        <span>Finmate</span>
+        <span>FinMate</span>
       </div>
     </div>
 
@@ -23,7 +28,57 @@
         <a href="expense.html">Expenses</a>
         <a href="invest.html">Investments</a>
       </div>
-      <div class="user-avatar" title="Account">👤</div>
+      <div class="profileWrap">
+        <button class="user-avatar" id="profileBtn" type="button" title="Account">👤</button>
+
+        <div class="profileMenu" id="profileMenu" aria-hidden="true">
+          <!-- Signed OUT view -->
+          <div class="pmSignedOut" id="pmSignedOut">
+            <div class="pmHeader">
+              <div class="pmHello">Welcome</div>
+              <div class="pmMeta">Sign in to access your dashboard.</div>
+            </div>
+
+            <div class="pmAuthBtns">
+              <button class="btn pmAuthPrimary" id="btnSignIn" type="button">Sign in</button>
+              <button class="btn btn-secondary pmAuthSecondary" id="btnCreate" type="button">Create account</button>
+            </div>
+
+            <div class="pmLinks">
+              <button class="pmLink" type="button"><span class="pmLeft">⚙️</span><span>Settings</span><span
+                  class="pmRight">›</span></button>
+              <button class="pmLink" type="button"><span class="pmLeft">❓</span><span>Help &amp; Support</span><span
+                  class="pmRight">›</span></button>
+            </div>
+          </div>
+
+          <!-- Signed IN view -->
+          <div class="pmSignedIn" id="pmSignedIn" style="display:none;">
+            <div class="pmHeader">
+              <div class="pmHello" id="pmHello">Hi, User</div>
+              <div class="pmMeta" id="pmMeta">Last login: —</div>
+            </div>
+
+            <div class="pmActions">
+              <button class="pmCircle" type="button"><span class="pmIcon">👥</span><span class="pmLabel">New
+                  account</span></button>
+              <button class="pmCircle" type="button"><span class="pmIcon">👤</span><span
+                  class="pmLabel">Profile</span></button>
+              <button class="pmCircle" type="button"><span class="pmIcon">⚙️</span><span
+                  class="pmLabel">Settings</span></button>
+            </div>
+
+            <div class="pmLinks">
+              <button class="pmLink" type="button"><span class="pmLeft">🎁</span><span>Refer a friend</span><span
+                  class="pmRight">›</span></button>
+              <button class="pmLink" type="button"><span class="pmLeft">❓</span><span>Help &amp; Support</span><span
+                  class="pmRight">›</span></button>
+            </div>
+
+            <button class="pmLogout" id="pmLogout" type="button">Log out</button>
+          </div>
+        </div>
+      </div>
     </div>
   </nav>
 
@@ -33,16 +88,16 @@
   <main class="container">
     <header class="hero">
       <div>
-        <h1>Hi Mohammed</h1>
+        <h1 id="welcomeTitle">Hello User</h1>
         <p class="muted">Here’s your overview report for the selected period.</p>
       </div>
 
       <div class="controls">
         <select class="select" id="rangeSelect">
-  <option value="30">Last 30 Days</option>
-  <option value="7">Last 7 Days</option>
-  <option value="month">This Month</option>
-</select>
+          <option value="30">Last 30 Days</option>
+          <option value="7">Last 7 Days</option>
+          <option value="month">This Month</option>
+        </select>
 
         <a class="btn" href="./expense.html">+ Add Transaction</a>
       </div>
@@ -141,7 +196,7 @@
   </main>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="./js/home.js"></script>
-
+  <script src="./js/profileMenu.js"></script>
 
 
 </body>
