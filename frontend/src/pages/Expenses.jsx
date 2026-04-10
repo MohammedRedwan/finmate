@@ -58,7 +58,6 @@ export default function Expenses() {
     try {
       const data = await getExpenses();
       const safeData = Array.isArray(data) ? data : [];
-
       setExpenses(safeData);
       setListMsg(safeData.length ? "" : "No expenses yet. Add your first one!");
     } catch (error) {
@@ -158,6 +157,7 @@ export default function Expenses() {
 
     localStorage.setItem(BUDGET_KEY, String(val));
     setBudget(val);
+    setBudgetInput(String(val));
   }
 
   function drawPieChart() {
@@ -205,7 +205,7 @@ export default function Expenses() {
     const radius = 65;
     let start = -Math.PI / 2;
 
-    entries.forEach(([category, value], index) => {
+    entries.forEach(([, value], index) => {
       const slice = (value / total) * Math.PI * 2;
       const end = start + slice;
       const color = colors[index % colors.length];
@@ -422,25 +422,23 @@ export default function Expenses() {
           <div className="panelTitle">Spending by Category</div>
           <canvas ref={pieCanvasRef} width="280" height="180" />
           <div className="muted" style={{ marginTop: "10px" }}>
-            {categoryLegend.length === 0 ? (
-              "Add expenses to see the chart."
-            ) : (
-              categoryLegend.map((item) => (
-                <div key={item.category}>
-                  <span
-                    style={{
-                      display: "inline-block",
-                      width: "10px",
-                      height: "10px",
-                      background: item.color,
-                      borderRadius: "2px",
-                      marginRight: "8px",
-                    }}
-                  />
-                  {item.category} — {money(item.value)} ({item.pct}%)
-                </div>
-              ))
-            )}
+            {categoryLegend.length === 0
+              ? "Add expenses to see the chart."
+              : categoryLegend.map((item) => (
+                  <div key={item.category}>
+                    <span
+                      style={{
+                        display: "inline-block",
+                        width: "10px",
+                        height: "10px",
+                        background: item.color,
+                        borderRadius: "2px",
+                        marginRight: "8px",
+                      }}
+                    />
+                    {item.category} — {money(item.value)} ({item.pct}%)
+                  </div>
+                ))}
           </div>
         </div>
 
